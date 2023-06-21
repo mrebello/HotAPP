@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.Hosting.WindowsServices;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace Hot;
 
@@ -73,18 +74,17 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         //    o.Conventions.AddPageRoute("/App", "");
         //});
 
+#if NET8_0_OR_GREATER
         builder.Services.AddRazorPages().AddRazorRuntimeCompilation(opt => {
             opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
         });
+#endif
+
         builder.Services.AddServerSideBlazor();
     }
 
     public override void Config_App(WebApplication app) {
         base.Config_App(app);
-
-        app.UseStaticFiles(new StaticFileOptions {
-            FileProvider = new EmbeddedFileProvider(Config.GetAsmResource, Config.GetAsmResource.GetName().Name + ".wwwroot")
-        });
 
         app.UseRouting();
         app.MapBlazorHub();
