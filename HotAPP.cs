@@ -21,12 +21,6 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
             (OperatingSystem.IsLinux() && Microsoft.Extensions.Hosting.Systemd.SystemdHelpers.IsSystemdService()) ||
             Config.IsDaemon) {
 
-
-
-
-
-
-
               return base.StartAsync(cancellationToken);
         } else {   // Senão, roda como app desktop
             StartPhotino(appname);
@@ -80,15 +74,16 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         });
 #endif
 
-        builder.Services.AddServerSideBlazor();
+        builder.Services.AddRazorComponents();
     }
 
     public override void Config_App(WebApplication app) {
         base.Config_App(app);
 
-        app.UseRouting();
-        app.MapBlazorHub();
-        app.MapFallbackToPage("/_Host");
+        app.MapRazorComponents<TComponent>();
+        //app.UseRouting();
+        //app.MapBlazorHub();
+        //app.MapFallbackToPage("/Index");
 
     }
 
