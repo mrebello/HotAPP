@@ -2,13 +2,13 @@
 using System.Threading;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text.Unicode;
 
 namespace Hot;
 
 public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
-
-
-
 
     public override Task StartAsync(CancellationToken cancellationToken) {
         //base.StartAsync(cancellationToken);
@@ -21,7 +21,7 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
             (OperatingSystem.IsLinux() && Microsoft.Extensions.Hosting.Systemd.SystemdHelpers.IsSystemdService()) ||
             Config.IsDaemon) {
 
-              return base.StartAsync(cancellationToken);
+            return base.StartAsync(cancellationToken);
         } else {   // Senão, roda como app desktop
             StartPhotino(appname);
             base.StopAsync(cancellationToken);
@@ -60,7 +60,6 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
     //    };
     //}
 
-
     public override void Config_Builder(WebApplicationBuilder builder) {
         base.Config_Builder(builder);
 
@@ -68,23 +67,24 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         //    o.Conventions.AddPageRoute("/App", "");
         //});
 
-#if NET8_0_OR_GREATER
         builder.Services.AddRazorPages().AddRazorRuntimeCompilation(opt => {
             opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
         });
-#endif
+        builder.Services.AddServerSideBlazor();
+//        builder.Services.AddRazorComponents();
 
-        builder.Services.AddRazorComponents();
+        //        builder.Services.AddSingleton<WeatherForecastService>();
+
     }
 
     public override void Config_App(WebApplication app) {
         base.Config_App(app);
 
-        app.MapRazorComponents<TComponent>();
-        //app.UseRouting();
-        //app.MapBlazorHub();
-        //app.MapFallbackToPage("/Index");
+//        app.MapRazorComponents<TComponent>();
+        app.UseRouting();
 
+        app.MapBlazorHub();
+        app.MapFallbackToPage("/_Host");
     }
 
 

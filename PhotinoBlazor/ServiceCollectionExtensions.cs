@@ -19,7 +19,7 @@ namespace Photino.Blazor
                 .Configure(opts =>
                 {
                     opts.AppBaseUri = new Uri(PhotinoWebViewManager.AppBaseUri);
-                    opts.HostPage = "index.html";
+                    opts.HostPage = "Photino.html";
                 });
 
             return services
