@@ -5,10 +5,18 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
+using System.Reflection.PortableExecutable;
 
 namespace Hot;
 
 public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
+
+    /// <summary>
+    /// Used to configure services for then APP in both Server (kestrel) and Desktop (Photino).
+    /// </summary>
+    /// <param name="services"></param>
+    public virtual void Config_Services(IServiceCollection services) {
+    }
 
     public override Task StartAsync(CancellationToken cancellationToken) {
         //base.StartAsync(cancellationToken);
@@ -32,13 +40,15 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
     }
 
 
-    public static void StartPhotino(string Title) {
+    public void StartPhotino(string Title) {
         var appBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
         appBuilder.Services.AddSingleton<IConfiguration>(HotConfiguration.configuration);
         appBuilder.Services.AddLogging(HotLog.LoggingCreate);
 
         appBuilder.RootComponents.Add<TComponent>("app");
+
+        Config_Services(appBuilder.Services);
 
         var app = appBuilder.Build();
 
@@ -54,11 +64,6 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         app.Run();
     }
 
-    //public override WebApplicationOptions? WebApplicationOptions() {
-    //    return new WebApplicationOptions() {
-    //        ContentRootPath = "C:\\"
-    //    };
-    //}
 
     public override void Config_Builder(WebApplicationBuilder builder) {
         base.Config_Builder(builder);
@@ -71,22 +76,19 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
             opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
         });
         builder.Services.AddServerSideBlazor();
-//        builder.Services.AddRazorComponents();
+        //        builder.Services.AddRazorComponents();
 
-        //        builder.Services.AddSingleton<WeatherForecastService>();
-
+        Config_Services(builder.Services);
     }
 
     public override void Config_App(WebApplication app) {
         base.Config_App(app);
 
-//        app.MapRazorComponents<TComponent>();
+        //        app.MapRazorComponents<TComponent>();
         app.UseRouting();
 
         app.MapBlazorHub();
         app.MapFallbackToPage("/_Host");
     }
-
-
 
 }
