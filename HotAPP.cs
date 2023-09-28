@@ -6,10 +6,13 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
 using System.Reflection.PortableExecutable;
+using PhotinoNET;
+using Microsoft.Extensions.Logging;
 
 namespace Hot;
 
 public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
+    [STAThread]
 
     /// <summary>
     /// Used to configure services for then APP in both Server (kestrel) and Desktop (Photino).
@@ -57,9 +60,19 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
             //            .SetIconFile("favicon.ico")
             .SetTitle(Title);
 
+        app.MainWindow.FullScreen = Config["HOTAPP:FullScreen"]!.ToBool();
+
         AppDomain.CurrentDomain.UnhandledException += (sender, error) => {
             app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
         };
+
+        app.MainWindow.RegisterWebMessageReceivedHandler((sender,message)=> {
+            var window = (PhotinoWindow)sender!;
+            if (message == "close-window") {
+                Log.LogInformation($"Closing \"{window.Title}\".");
+                window.Close();
+            }
+        });
 
         app.Run();
     }
