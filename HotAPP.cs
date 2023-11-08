@@ -8,6 +8,8 @@ using System.Text.Unicode;
 using System.Reflection.PortableExecutable;
 using PhotinoNET;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hot;
 
@@ -78,14 +80,19 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
     }
 
 
+    public virtual Action<RazorPagesOptions> Config_RazorPageOptions() {
+        return ((opt) => { });
+    }
+
+
     public override void Config_Builder(WebApplicationBuilder builder) {
         base.Config_Builder(builder);
 
         //builder.Services.AddMvc().AddRazorPagesOptions(o => {
         //    o.Conventions.AddPageRoute("/App", "");
         //});
-
-        builder.Services.AddRazorPages().AddRazorRuntimeCompilation(opt => {
+        
+        builder.Services.AddRazorPages(Config_RazorPageOptions()).AddRazorRuntimeCompilation(opt => {
             opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
         });
         builder.Services.AddServerSideBlazor();
@@ -99,6 +106,8 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
 
         //        app.MapRazorComponents<TComponent>();
         app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapBlazorHub();
         app.MapFallbackToPage("/_Host");
