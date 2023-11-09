@@ -50,6 +50,13 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
 
         appBuilder.Services.AddSingleton<IConfiguration>(HotConfiguration.configuration);
         appBuilder.Services.AddLogging(HotLog.LoggingCreate);
+        if (Config["HotAPI:App:UseAuthentication"]!.ToBool()) {
+            appBuilder.Services.AddAuthentication();
+            appBuilder.Services.AddCascadingAuthenticationState();
+        }
+        if (Config["HotAPI:App:UseAuthorization"]!.ToBool())
+            appBuilder.Services.AddAuthorization();
+
 
         appBuilder.RootComponents.Add<TComponent>("app");
 
@@ -106,8 +113,6 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
 
         //        app.MapRazorComponents<TComponent>();
         app.UseRouting();
-        app.UseAuthentication();
-        app.UseAuthorization();
 
         app.MapBlazorHub();
         app.MapFallbackToPage("/_Host");
