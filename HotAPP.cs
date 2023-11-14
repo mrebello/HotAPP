@@ -99,13 +99,48 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         //    o.Conventions.AddPageRoute("/App", "");
         //});
         
-        builder.Services.AddRazorPages(Config_RazorPageOptions()).AddRazorRuntimeCompilation(opt => {
-            opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
-        });
+        builder.Services
+            .AddRazorPages(Config_RazorPageOptions())
+            .AddRazorRuntimeCompilation(opt => {
+                opt.FileProviders.Add(new EmbeddedFileProvider(Config.GetAsmResource));
+            });
         builder.Services.AddServerSideBlazor();
         //        builder.Services.AddRazorComponents();
 
-        Config_Services(builder.Services);
+
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<HttpContextAccessor>();
+//        blazor.Shared
+//        =============
+//      public class HttpContextAccessor {
+//        private readonly IHttpContextAccessor _httpContextAccessor;
+//
+//        public HttpContextAccessor(IHttpContextAccessor httpContextAccessor) {
+//            _httpContextAccessor = httpContextAccessor;
+//        }
+//
+//        public HttpContext Context => _httpContextAccessor.HttpContext;
+//      }
+//
+//
+//      blazor.Client to App.cshtml
+//      ===========================
+//    @inject blazor.Shared.HttpContextAccessor HttpContext
+//    <Router AppAssembly=typeof(Program).Assembly />
+//
+//    @functions 
+//    {      
+//      protected override void OnInit() {
+//        HttpContext.Context.Request.Cookies.* *
+//
+//        // Or data passed through middleware in blazor.Server
+//        HttpContext.Context.Features.Get<T>()
+//    }
+//}
+
+
+
+Config_Services(builder.Services);
     }
 
     public override void Config_App(WebApplication app) {
