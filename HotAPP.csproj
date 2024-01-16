@@ -52,12 +52,12 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotAPI" Version="1.0.8732.1074-beta" />
-    <PackageReference Include="Photino.NET" Version="2.5.2" />
+    <PackageReference Include="HotAPI" Version="1.0.8781.570-beta" />
+    <PackageReference Include="Photino.NET" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
