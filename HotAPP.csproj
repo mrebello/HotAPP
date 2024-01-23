@@ -56,8 +56,11 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="HotAPI" Version="1.0.8781.570-beta" />
     <PackageReference Include="Photino.NET" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotAPI\HotAPI\HotAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
