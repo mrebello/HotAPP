@@ -51,12 +51,12 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="8.0.2">
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="9.0.0-preview.4.24267.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -64,7 +64,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Photino.NET" Version="2.6.0" />
+    <PackageReference Include="Photino.Blazor" Version="3.0.11" />
   </ItemGroup>
 
   <ItemGroup>

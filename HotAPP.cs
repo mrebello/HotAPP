@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
 using System.Reflection.PortableExecutable;
-using PhotinoNET;
+using Photino.NET;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
