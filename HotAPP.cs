@@ -67,7 +67,10 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         // customize window
         app.MainWindow
             //            .SetIconFile("favicon.ico")
-            .SetTitle(Title);
+            .SetTitle(Title)
+            .SetWidth(app.MainWindow.MaxWidth)
+            .SetHeight(app.MainWindow.MaxHeight)
+            .Center();
 
         app.MainWindow.FullScreen = Config["HOTAPP:FullScreen"]!.ToBool();
 
@@ -75,7 +78,7 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
             app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
         };
 
-        app.MainWindow.RegisterWebMessageReceivedHandler((sender,message)=> {
+        app.MainWindow.RegisterWebMessageReceivedHandler((sender, message) => {
             var window = (PhotinoWindow)sender!;
             if (message == "close-window") {
                 Log.LogInformation($"Closing \"{window.Title}\".");
@@ -98,7 +101,7 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
         //builder.Services.AddMvc().AddRazorPagesOptions(o => {
         //    o.Conventions.AddPageRoute("/App", "");
         //});
-        
+
         builder.Services
             .AddRazorPages(Config_RazorPageOptions())
             .AddRazorRuntimeCompilation(opt => {
@@ -110,37 +113,37 @@ public class HotAPP<TComponent> : HotAPIServer where TComponent : IComponent {
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<HttpContextAccessor>();
-//        blazor.Shared
-//        =============
-//      public class HttpContextAccessor {
-//        private readonly IHttpContextAccessor _httpContextAccessor;
-//
-//        public HttpContextAccessor(IHttpContextAccessor httpContextAccessor) {
-//            _httpContextAccessor = httpContextAccessor;
-//        }
-//
-//        public HttpContext Context => _httpContextAccessor.HttpContext;
-//      }
-//
-//
-//      blazor.Client to App.cshtml
-//      ===========================
-//    @inject blazor.Shared.HttpContextAccessor HttpContext
-//    <Router AppAssembly=typeof(Program).Assembly />
-//
-//    @functions 
-//    {      
-//      protected override void OnInit() {
-//        HttpContext.Context.Request.Cookies.* *
-//
-//        // Or data passed through middleware in blazor.Server
-//        HttpContext.Context.Features.Get<T>()
-//    }
-//}
+        //        blazor.Shared
+        //        =============
+        //      public class HttpContextAccessor {
+        //        private readonly IHttpContextAccessor _httpContextAccessor;
+        //
+        //        public HttpContextAccessor(IHttpContextAccessor httpContextAccessor) {
+        //            _httpContextAccessor = httpContextAccessor;
+        //        }
+        //
+        //        public HttpContext Context => _httpContextAccessor.HttpContext;
+        //      }
+        //
+        //
+        //      blazor.Client to App.cshtml
+        //      ===========================
+        //    @inject blazor.Shared.HttpContextAccessor HttpContext
+        //    <Router AppAssembly=typeof(Program).Assembly />
+        //
+        //    @functions 
+        //    {      
+        //      protected override void OnInit() {
+        //        HttpContext.Context.Request.Cookies.* *
+        //
+        //        // Or data passed through middleware in blazor.Server
+        //        HttpContext.Context.Features.Get<T>()
+        //    }
+        //}
 
 
 
-Config_Services(builder.Services);
+        Config_Services(builder.Services);
     }
 
     public override void Config_App(WebApplication app) {
