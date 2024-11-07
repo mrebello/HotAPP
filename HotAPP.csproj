@@ -64,7 +64,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Photino.Blazor" Version="3.1.10" />
+    <PackageReference Include="Photino.Blazor" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
